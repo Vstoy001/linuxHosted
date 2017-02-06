@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <link href="{{url_for('static', filename='main.css')}}" rel="stylesheet">
+        <title> Udacity Catalog </title>
+    </head>
+
+    <body style="margin: 0 40px; background-color: rgb(125, 125, 125);">
+        <div style="width: 500px">
+            <h2 style="text-align: center; margin: 10px 0"> Delete this item from the catalog? </h2>
+            <form method="post">
+                <div class="txtBlk">
+                    Name:
+                    <hr>
+                    <p>{{item.title}}</p>
+                </div>
+                <div class="txtBlk" style="margin: 10px 0">
+                    Description:
+                    <hr>
+                    <p>{{item.description}}</p>
+                </div>
+                <div class="txtBlk">
+                    Category:
+                    <hr>
+                    <p>{{category.name}}</p>
+                </div>
+                <br>
+                <a href="{{url_for('CatalogFront')}}" class="btn btn-delete">Cancel</a>
+                <button style="float: right" type="submit" class="btn btn-delete btn-override"> Delete </button>
+            </form>
+        </div>
+    </body>
+</html>

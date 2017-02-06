@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <link href="{{url_for('static', filename='main.css')}}" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+        <title> Udacity Catalog </title>
+    </head>
+
+    <body style="margin: 0 40px; background-color: rgb(45, 45, 45);">
+        <h1 style="text-align: center; color: white; margin: 10px 0">
+            Udacity Costume Catalog
+        </h1>
+        {% if loggedIn %}
+        <div>
+            <a href="{{url_for('addCategoryItem')}}" class="btn btn-add"> Add your own item! </a>
+        </div>
+        {% endif %}
+        <div id="result">
+        </div>
+        <div style="position: absolute; top: 50px; right: 10px;">
+            {% if not loggedIn %}
+            <div id="signinButton">
+                <span class="g-signin"
+                    data-scope="openid email"
+                    data-clientid="868415501215-ku9mknu74ces0oisnndkan75aq1ig5qs.apps.googleusercontent.com"
+                    data-redirecturi="postmessage"
+                    data-accesstype="offline"
+                    data-cookiepolicy="single_host_origin"
+                    data-callback="signInCallback"
+                    data-approvalprompt="force">
+                </span>
+            </div>
+            {% else %}
+            <div class="btn btn-delete" onclick="signOutCallback()"> Logout </div>
+            {% endif %}
+        </div>
+        <div class="catalogMenu">
+        {% for type in catalog %}
+            {% if category and type.id == category.id %}
+                <span class="highlighted">
+            {% else %}
+                <span style="color: rgb(150, 150, 150)">
+            {% endif %}
+                    <a class="catalogCategory cata-btn" href="{{url_for('viewCategoryItems', categoryId=type.id)}}"> {{type.name}} </a>
+                </span>
+        {% endfor %}
+        </div>
+        <div class="itemMenu">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <script>
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/gconnect?state={{state}}',
+                    processData: false,
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    data: authResult['code'],
+                    success: function(result) {
+                        if(result) {
+                            $('#result').html('Login Successful! <br>')
+                            setTimeout(function() {
+                                window.location.href="/catalog"
+                            }, 2000)
+                        } else if(authResult['error']) {
+                            $('#result').html('There was an error' + authResult['error'])
+                        } else {
+                            $('#result').html('Failed to make server-side call. Check your config and console.')
+                        }
+                    }
+                })
+            }
+        }
+        function signOutCallback() {
+            $.ajax({
+                type: 'POST',
+                url: '/gdisconnect',
+                processData: false,
+                contentType: 'application/octet-stream; charset=utf-8',
+                success: function(result) {
+                    $('#result').html('Logout Successful! <br>')
+                    setTimeout(function() {
+                        window.location.href="/catalog"
+                    }, 2000)
+                },
+                error: function(err) {
+                    $('#result').html('Failed to execute server-side call. ', err)
+                }
+            })
+        }
+        </script>
+    </body>
+</html>

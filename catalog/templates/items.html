@@ -1,0 +1,23 @@
+{% extends "home.html" %}
+
+{% block content %}
+<div>
+    <h2 style="padding: 0 10px;"> Available {{category.name}}! </h2>
+    <div style="padding: 0 20px;">
+        {% for item in items %}
+        <div class="item">
+            <h3 style="margin: 0 10px;"> {{item.title}} </h3>
+            <hr>
+            <p> {{item.description}} </p>
+            <!-- <hr> -->
+            {% if loggedIn %}
+            <div>
+                <a class="btn btn-edit" href="{{url_for('editCategoryItem', itemId=item.id)}}"> Edit </a>
+                <a class="btn btn-delete" href="{{url_for('deleteCategoryItem', categoryId=category.id, itemId=item.id)}}"> Delete </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

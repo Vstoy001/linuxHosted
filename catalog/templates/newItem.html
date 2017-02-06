@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <link href="{{url_for('static', filename='main.css')}}" rel="stylesheet">
+        <title> Udacity Catalog </title>
+    </head>
+
+    <body style="margin: 0 40px; background-color: rgb(125, 125, 125);">
+        <div style="width: 500px">
+            <h2 style="text-align: center; margin: 10px 0"> Add new item for catalog: </h2>
+            <form method="post">
+                <div>
+                    <span class="formLabel"> Name: </span>
+                    <input type="text" name="title">
+                </div>
+                <div style="margin: 10px 0">
+                    <span class="formLabel" style="float: left;"> Description: </span>
+                    <textarea style="width: 300px; height: 200px; margin-left: 5px;" type="text" name="description"></textarea>
+                </div>
+                <div>
+                    <span class="formLabel"> Category </span>
+                    <select name="category">
+                        {% for category in catalog %}
+                            <option value="{{category.id}}"> {{category.name}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <a href="{{url_for('CatalogFront')}}" class="btn btn-delete">Cancel</a>
+                <button style="float: right" type="submit" class="btn btn-edit btn-override"> Submit </button>
+            </form>
+        </div>
+    </body>
+</html>
